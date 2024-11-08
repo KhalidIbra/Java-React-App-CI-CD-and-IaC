@@ -1,0 +1,12 @@
+/Users/khalidibrahim/spring-boot-react-example/src/main/java/com/contoso/payroll/SecurityConfiguration.java
+/Users/khalidibrahim/spring-boot-react-example/src/main/java/com/contoso/payroll/DatabaseLoader.java
+/Users/khalidibrahim/spring-boot-react-example/src/main/java/com/contoso/payroll/SpringDataJpaUserDetailsService.java
+/Users/khalidibrahim/spring-boot-react-example/src/main/java/com/contoso/payroll/ReactAndSpringDataRestApplication.java
+/Users/khalidibrahim/spring-boot-react-example/src/main/java/com/contoso/payroll/WebSocketConfiguration.java
+/Users/khalidibrahim/spring-boot-react-example/src/main/java/com/contoso/payroll/Employee.java
+/Users/khalidibrahim/spring-boot-react-example/src/main/java/com/contoso/payroll/ManagerRepository.java
+/Users/khalidibrahim/spring-boot-react-example/src/main/java/com/contoso/payroll/Manager.java
+/Users/khalidibrahim/spring-boot-react-example/src/main/java/com/contoso/payroll/EmployeeRepository.java
+/Users/khalidibrahim/spring-boot-react-example/src/main/java/com/contoso/payroll/SpringDataRestEventHandler.java
+/Users/khalidibrahim/spring-boot-react-example/src/main/java/com/contoso/payroll/EventHandler.java
+/Users/khalidibrahim/spring-boot-react-example/src/main/java/com/contoso/payroll/HomeController.java
