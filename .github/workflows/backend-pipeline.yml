@@ -3,8 +3,8 @@ name: Backend CI/CD Pipeline
 on:
   push:
     branches:
-      - main    # For production
-      - develop # For testing
+      - main
+      - develop
   pull_request:
     branches:
       - main
@@ -12,7 +12,7 @@ on:
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  DOCKER_IMAGE: gcr.io/${{ secrets.GCP_PROJECT_ID }}/backend
+  BACKEND_IMAGE: gcr.io/${{ secrets.GCP_PROJECT_ID }}/backend
 
 jobs:
   build:
@@ -22,31 +22,28 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Java
+    - name: Set up JDK
       uses: actions/setup-java@v2
       with:
+        distribution: 'temurin'
         java-version: '11'
 
-    - name: Cache Maven dependencies
-      uses: actions/cache@v2
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
+    - name: Build backend with Maven
+      run: mvn clean install
 
-    - name: Build and test with Maven
-      run: mvn clean install -DskipTests
+    - name: Set up GCloud CLI and authenticate to GCR
+      uses: google-github-actions/auth@v0
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    - name: Configure Docker for GCR
+      run: gcloud auth configure-docker gcr.io
 
     - name: Build Docker image
-      run: |
-        docker build -t $DOCKER_IMAGE:latest .
+      run: docker build -t $BACKEND_IMAGE:latest .
 
-    - name: Authenticate to GCR
-      run: echo ${{ secrets.GCP_SA_KEY }} | docker login -u _json_key --password-stdin https://gcr.io
-
-    - name: Push Docker image to GCR
-      run: docker push $DOCKER_IMAGE:latest
+    - name: Push Docker image to Container Registry
+      run: docker push $BACKEND_IMAGE:latest
 
   deploy-to-testing:
     runs-on: ubuntu-latest
@@ -54,9 +51,6 @@ jobs:
     if: github.ref == 'refs/heads/develop'
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
     - name: Set up GCloud CLI
       uses: google-github-actions/setup-gcloud@v2
       with:
@@ -67,10 +61,10 @@ jobs:
       run: |
         gcloud container clusters get-credentials my-cluster --zone us-central1-a --project ${{ secrets.GCP_PROJECT_ID }}
 
-    - name: Deploy to GKE - Testing
+    - name: Deploy backend to GKE for testing
       run: |
         kubectl create namespace testing || true
-        kubectl set image deployment/backend backend=$DOCKER_IMAGE:latest -n testing
+        kubectl apply -f k8s/backend-deployment.yaml --namespace=testing
         kubectl rollout status deployment/backend -n testing
 
   deploy-to-production:
@@ -79,9 +73,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
     - name: Set up GCloud CLI
       uses: google-github-actions/setup-gcloud@v2
       with:
@@ -92,8 +83,8 @@ jobs:
       run: |
         gcloud container clusters get-credentials my-cluster --zone us-central1-a --project ${{ secrets.GCP_PROJECT_ID }}
 
-    - name: Deploy to GKE - Production
+    - name: Deploy backend to GKE for prod
       run: |
         kubectl create namespace production || true
-        kubectl set image deployment/backend backend=$DOCKER_IMAGE:latest -n production
+        kubectl apply -f k8s/backend-deployment.yaml --namespace=production
         kubectl rollout status deployment/backend -n production

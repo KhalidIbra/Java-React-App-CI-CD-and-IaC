@@ -12,7 +12,7 @@ on:
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  DOCKER_IMAGE: gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend
+  FRONTEND_IMAGE: gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend
 
 jobs:
   build:
@@ -33,15 +33,19 @@ jobs:
     - name: Build React app
       run: npm run build
 
-    - name: Build Docker image
-      run: |
-        docker build -t $DOCKER_IMAGE:latest .
+    - name: Set up GCloud CLI and authenticate to Container Registry
+      uses: google-github-actions/auth@v0
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-    - name: Authenticate to GCR
-      run: echo ${{ secrets.GCP_SA_KEY }} | docker login -u _json_key --password-stdin https://gcr.io
+    - name: Configure Docker for GCR
+      run: gcloud auth configure-docker gcr.io
+
+    - name: Build Docker image
+      run: docker build -t $FRONTEND_IMAGE:latest .
 
     - name: Push Docker image to GCR
-      run: docker push $DOCKER_IMAGE:latest
+      run: docker push $FRONTEND_IMAGE:latest
 
   deploy-to-testing:
     runs-on: ubuntu-latest
@@ -59,10 +63,10 @@ jobs:
       run: |
         gcloud container clusters get-credentials my-cluster --zone us-central1-a --project ${{ secrets.GCP_PROJECT_ID }}
 
-    - name: Deploy to GKE - Testing
+    - name: Deploy frontend to GKE for testing
       run: |
         kubectl create namespace testing || true
-        kubectl set image deployment/frontend frontend=$DOCKER_IMAGE:latest -n testing
+        kubectl apply -f k8s/frontend-deployment.yaml --namespace=testing
         kubectl rollout status deployment/frontend -n testing
 
   deploy-to-production:
@@ -81,8 +85,8 @@ jobs:
       run: |
         gcloud container clusters get-credentials my-cluster --zone us-central1-a --project ${{ secrets.GCP_PROJECT_ID }}
 
-    - name: Deploy to GKE - Production
+    - name: Deploy frontend to GKE for prod
       run: |
         kubectl create namespace production || true
-        kubectl set image deployment/frontend frontend=$DOCKER_IMAGE:latest -n production
+        kubectl apply -f k8s/frontend-deployment.yaml --namespace=production
         kubectl rollout status deployment/frontend -n production
