@@ -26,7 +26,7 @@ jobs:
     - name: Move repo files
       run: |
          mv /home/runner/work/Java-React-App-CI-CD-and-IaC/Java-React-App-CI-CD-and-IaC/* /home/runner/work/Java-React-App-CI-CD-and-IaC/
-         rmdir /home/runner/work/Java-React-App-CI-CD-and-IaC/Java-React-App-CI-CD-and-IaC     
+           
       
 
     - name: Print working directory
