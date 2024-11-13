@@ -30,7 +30,7 @@ jobs:
         java-version: '11'
 
     - name: Build backend with Maven
-      working-directory: ./Backend 
+      working-directory: Backend 
       run: mvn clean install
 
     - name: Set up GCloud CLI and authenticate to GCR
