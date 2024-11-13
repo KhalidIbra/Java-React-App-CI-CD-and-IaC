@@ -29,8 +29,9 @@ jobs:
         java-version: '11'
 
     - name: Build backend with Maven
-      run: mvn clean install
-      working-directory: Backend
+      run: |
+        cd Java-React-App-CI-CD-and-IaC/Backend  
+        mvn clean install
 
     - name: Set up GCloud CLI and authenticate to GCR
       uses: google-github-actions/auth@v0
