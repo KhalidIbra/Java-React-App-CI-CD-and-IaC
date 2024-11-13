@@ -21,6 +21,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+      with:
+        path: ./my-repo-folder
       
 
     - name: Print working directory
@@ -36,7 +38,7 @@ jobs:
         java-version: '11'
 
     - name: Build backend with Maven
-      working-directory: Java-React-App-CI-CD-and-IaC/Backend
+      working-directory: ./my-repo-folder/Backend
       run: mvn clean install
 
     - name: Set up GCloud CLI and authenticate to GCR
