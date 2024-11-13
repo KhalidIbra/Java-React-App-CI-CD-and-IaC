@@ -14,31 +14,31 @@ env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   BACKEND_IMAGE: gcr.io/${{ secrets.GCP_PROJECT_ID }}/backend
 
-  jobs:
-    build:
-      runs-on: ubuntu-latest
-  
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
-          with:
-            path: .
-  
-        - name: Print working directory
-          run: pwd
-  
-        - name: Debug - List directory structure
-          run: ls -R
-  
-        - name: Set up JDK
-          uses: actions/setup-java@v2
-          with:
-            distribution: 'temurin'
-            java-version: '11'
-  
-        - name: Build backend with Maven
-          working-directory: ./Backend
-          run: mvn clean install
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        path: .
+
+    - name: Print working directory
+      run: pwd    
+
+    - name: List directory after checkout
+      run: ls -R
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+
+    - name: Build backend with Maven
+      working-directory: ./Backend 
+      run: mvn clean install
 
     - name: Set up GCloud CLI and authenticate to GCR
       uses: google-github-actions/auth@v0
