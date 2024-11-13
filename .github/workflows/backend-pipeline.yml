@@ -30,7 +30,7 @@ jobs:
 
     - name: Build backend with Maven
       run: mvn clean install
-      working-directory: /Backend
+      working-directory: Backend
 
     - name: Set up GCloud CLI and authenticate to GCR
       uses: google-github-actions/auth@v0
