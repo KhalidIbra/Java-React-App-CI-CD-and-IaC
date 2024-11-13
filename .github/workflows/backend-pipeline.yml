@@ -30,7 +30,7 @@ jobs:
 
     - name: Build backend with Maven
       run: mvn clean install
-      working-directory: ./Backend
+      working-directory: /Backend
 
     - name: Set up GCloud CLI and authenticate to GCR
       uses: google-github-actions/auth@v0
@@ -65,7 +65,7 @@ jobs:
     - name: Deploy backend to GKE for testing
       run: |
         kubectl create namespace testing || true
-        kubectl apply -f k8s/backend-deployment.yaml --namespace=testing
+        kubectl apply -f Backend/backend-deployment.yaml --namespace=testing
         kubectl rollout status deployment/backend -n testing
 
   deploy-to-production:
@@ -87,5 +87,5 @@ jobs:
     - name: Deploy backend to GKE for prod
       run: |
         kubectl create namespace production || true
-        kubectl apply -f k8s/backend-deployment.yaml --namespace=production
+        kubectl apply -f Backend/backend-deployment.yaml --namespace=production
         kubectl rollout status deployment/backend -n production
