@@ -21,6 +21,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+      with:
+        path: .
 
     - name: List directory after checkout
       run: ls -R
@@ -32,7 +34,7 @@ jobs:
         java-version: '11'
 
     - name: Build backend with Maven
-      working-directory: ./Backend 
+      working-directory: Backend 
       run: mvn clean install
 
     - name: Set up GCloud CLI and authenticate to GCR
