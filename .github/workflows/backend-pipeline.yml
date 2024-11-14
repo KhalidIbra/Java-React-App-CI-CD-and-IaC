@@ -24,7 +24,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         distribution: 'temurin'
-        java-version: 14
+        java-version: 23
 
     - name: Build project with Maven
       run: mvn -B package --file pom.xml
