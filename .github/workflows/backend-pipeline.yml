@@ -22,11 +22,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         path: .
-    - name: Verify Backend Directory
-      run:  ls -R Java-React-App-CI-CD-and-IaC
    
-
-
     - name: Set up JDK 
       uses: actions/setup-java@v2
       with:
