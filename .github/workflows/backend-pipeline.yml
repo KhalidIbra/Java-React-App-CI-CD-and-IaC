@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        path: ./Java-React-App-CI-CD-and-IaC
+        path: .
 
     - name: Verify Directory Structure
       run: |
@@ -36,7 +36,8 @@ jobs:
         java-version: 23  
 
     - name: Build project with Maven
-      run: mvn -B package --file Java-React-App-CI-CD-and-IaC/Backend/pom.xml
+      run: mvn -B package --file pom.xml
+      working-directory: Backend
 
     - name: Set up GCloud CLI and authenticate to GCR
       uses: google-github-actions/auth@v0
