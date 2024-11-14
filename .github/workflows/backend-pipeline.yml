@@ -36,15 +36,7 @@ jobs:
         java-version: 23  
 
     - name: Build project with Maven
-      run: |
-          MAVEN_POM_PATH="./Java-React-App-CI-CD-and-IaC/Backend/pom.xml"
-          if [ -f "$MAVEN_POM_PATH" ]; then
-            echo "Found pom.xml in Backend folder, proceeding with Maven build..."
-            mvn -B package --file "$MAVEN_POM_PATH"
-          else
-            echo "Error: pom.xml not found at $MAVEN_POM_PATH."
-            exit 1
-          fi
+      run: mvn -B package --file ./Backend/pom.xml
 
     - name: Set up GCloud CLI and authenticate to GCR
       uses: google-github-actions/auth@v0
