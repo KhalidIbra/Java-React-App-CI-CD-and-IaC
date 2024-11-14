@@ -23,7 +23,7 @@ jobs:
       with:
         path: .
     - name: Verify Backend Directory
-      run:  ls -R Backend
+      run:  ls -R Java-React-App-CI-CD-and-IaC
    
 
 
