@@ -28,7 +28,10 @@ jobs:
           echo "Listing directory structure:"
           ls -R .
     
-   
+    - name: Print current directory
+      run: pwd
+
+
     - name: Set up JDK 
       uses: actions/setup-java@v2
       with:
