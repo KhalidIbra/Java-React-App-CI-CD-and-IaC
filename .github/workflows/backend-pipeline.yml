@@ -20,13 +20,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK
-    - with: 
-       path: . 
-
+      with:
+        path: .
     - name: Verify Backend Directory
-      run: ls -R Backend   
+      run:  ls -R Backend
+   
 
+
+    - name: Set up JDK 
       uses: actions/setup-java@v2
       with:
         distribution: 'temurin'
