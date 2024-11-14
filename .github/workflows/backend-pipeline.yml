@@ -36,7 +36,8 @@ jobs:
         java-version: 23  
 
     - name: Build project with Maven
-      run: cd ./Java-React-App-CI-CD-and-IaC/Backend
+      run: |
+        cd ./Java-React-App-CI-CD-and-IaC/Backend
         mvn -B package --file pom.xml
       
 
