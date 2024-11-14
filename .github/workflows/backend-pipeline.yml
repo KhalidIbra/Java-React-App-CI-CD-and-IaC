@@ -26,7 +26,7 @@ jobs:
     - name: Verify Directory Structure
       run: |
           echo "Listing directory structure:"
-          ls -R ./Java-React-App-CI-CD-and-IaC
+          ls -R .
     
    
     - name: Set up JDK 
@@ -37,11 +37,12 @@ jobs:
 
     - name: Build project with Maven
       run: |
-          if [ -f ./Java-React-App-CI-CD-and-IaC/Backend/pom.xml ]; then
+          MAVEN_POM_PATH="./Java-React-App-CI-CD-and-IaC/Backend/pom.xml"
+          if [ -f "$MAVEN_POM_PATH" ]; then
             echo "Found pom.xml in Backend folder, proceeding with Maven build..."
-            mvn -B package --file ./repo/Backend/pom.xml
+            mvn -B package --file "$MAVEN_POM_PATH"
           else
-            echo "Error: pom.xml not found in Backend folder."
+            echo "Error: pom.xml not found at $MAVEN_POM_PATH."
             exit 1
           fi
 
