@@ -27,7 +27,7 @@ jobs:
         java-version: 23  
 
     - name: Build project with Maven
-      run: mvn -B package --file Backend /pom.xml
+      run: mvn -B package --file Backend/pom.xml
 
     - name: Set up GCloud CLI and authenticate to GCR
       uses: google-github-actions/auth@v0
