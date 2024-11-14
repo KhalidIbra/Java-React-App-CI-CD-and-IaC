@@ -36,8 +36,9 @@ jobs:
         java-version: 23  
 
     - name: Build project with Maven
-      run: mvn -B package --file pom.xml
-      working-directory: Backend
+      run: cd ./Java-React-App-CI-CD-and-IaC/Backend
+        mvn -B package --file pom.xml
+      
 
     - name: Set up GCloud CLI and authenticate to GCR
       uses: google-github-actions/auth@v0
