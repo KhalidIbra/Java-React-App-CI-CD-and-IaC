@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        path: .
+        path: ./Java-React-App-CI-CD-and-IaC
    
     - name: Set up JDK 
       uses: actions/setup-java@v2
@@ -30,7 +30,14 @@ jobs:
         java-version: 23  
 
     - name: Build project with Maven
-      run: mvn -B package --file /home/runner/work/Java-React-App-CI-CD-and-IaC/Backend/pom.xml
+      run: |
+          if [ -f ./Java-React-App-CI-CD-and-IaC/Backend/pom.xml ]; then
+            echo "Found pom.xml in Backend folder, proceeding with Maven build..."
+            mvn -B package --file ./repo/Backend/pom.xml
+          else
+            echo "Error: pom.xml not found in Backend folder."
+            exit 1
+          fi
 
     - name: Set up GCloud CLI and authenticate to GCR
       uses: google-github-actions/auth@v0
