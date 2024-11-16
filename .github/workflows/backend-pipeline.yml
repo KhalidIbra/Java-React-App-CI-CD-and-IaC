@@ -39,6 +39,7 @@ jobs:
         java-version: 23  
 
     - name: Build project with Maven
+      working-directory: ./Backend
       run: mvn clean install
       
 
