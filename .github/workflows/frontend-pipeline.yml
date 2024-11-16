@@ -28,9 +28,7 @@ jobs:
         node-version: '18'
 
     - name: Install dependencies
-      run: | 
-        cd backend
-        npm install 
+      run: npm install 
 
     - name: Build React app
       run: npm run build
