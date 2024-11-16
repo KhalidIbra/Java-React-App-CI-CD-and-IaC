@@ -33,7 +33,7 @@ jobs:
 
     - name: Initialize Terraform with Backend for Environment
       run: |
-        terraform -chdir=./IaC init \
+        terraform -chdir=Java-React-App-CI-CD-and-IaC/IaC init \
         -backend-config="bucket=${{ secrets.TERRAFORM_STATE_BUCKET }}" \
         -backend-config="prefix=testing/terraform.tfstate"
 
