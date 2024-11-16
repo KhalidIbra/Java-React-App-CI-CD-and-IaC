@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket = "ki-terraform-state-bucket"
+    bucket = "${secrets.TERRAFORM_STATE_BUCKET}"
     prefix = "testing/terraform.tfstate"
   }
 }
