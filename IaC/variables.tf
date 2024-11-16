@@ -14,3 +14,7 @@ variable "CLUSTER_NAME"  {
     type = string
     default = "my-gke-cluster" 
 }
+variable "environment" {
+  description = "The deployment environment (e.g., testing or production)"
+  type        = string
+}  
