@@ -64,8 +64,8 @@ jobs:
     if: github.ref == 'refs/heads/develop'
 
     steps:
-    - name: Set up GCloud CLI
-      uses: google-github-actions/setup-gcloud@v2
+    - name: Set up GCloud CLI and authenticate to GVR
+      uses: google-github-actions/auth@v2
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         credentials_json: ${{ secrets.GCP_CREDENTIALS_FILE }}
@@ -86,8 +86,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-    - name: Set up GCloud CLI
-      uses: google-github-actions/setup-gcloud@v2
+    - name: Set up GCloud CLI and authenticate to GCR
+      uses: google-github-actions/auth@v2
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         credentials_json: ${{ secrets.GCP_CREDENTIALS_FILE }}
