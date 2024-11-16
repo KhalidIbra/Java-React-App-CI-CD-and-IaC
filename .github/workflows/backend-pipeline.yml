@@ -53,10 +53,10 @@ jobs:
       run: gcloud auth configure-docker gcr.io
 
     - name: Build Docker image
-      run: docker build -t $BACKEND_IMAGE:latest -f backend/Dockerfile .
+      run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-image-repo:latest -f backend/Dockerfile .
 
     - name: Push Docker image to Container Registry
-      run: docker push $BACKEND_IMAGE:latest
+      run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-image-repo:latest
 
   deploy-to-testing:
     runs-on: ubuntu-latest
