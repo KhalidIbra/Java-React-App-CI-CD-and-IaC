@@ -38,8 +38,8 @@ jobs:
         distribution: 'temurin'
         java-version: 23  
 
-        - name: Run the Maven verify phase
-        run: mvn --batch-mode --update-snapshots verify
+    - name: Run the Maven verify phase
+      run: mvn --batch-mode --update-snapshots verify
       
 
     - name: Set up GCloud CLI and authenticate to GCR
