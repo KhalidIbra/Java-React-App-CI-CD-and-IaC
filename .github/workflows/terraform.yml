@@ -57,7 +57,9 @@ jobs:
         terraform_version: 1.0.0
 
     - name: Terraform Plan for ${{ github.event.inputs.environment }} Environment
-      run: terraform -chdir=IaC plan -var="environment=${{ github.event.inputs.environment }}"
+      run: |
+        export TF_LOG=DEBUG
+        terraform -chdir=IaC plan -var="environment=${{ github.event.inputs.environment }}"
 
   terraform-apply:
     runs-on: ubuntu-latest
