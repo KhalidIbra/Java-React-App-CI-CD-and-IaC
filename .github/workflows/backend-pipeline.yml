@@ -51,7 +51,7 @@ jobs:
       run: gcloud auth configure-docker gcr.io
 
     - name: Build Docker image
-      run: docker build -t $BACKEND_IMAGE:latest -f Backend/Dockerfile .
+      run: docker build -t $BACKEND_IMAGE:latest -f backend/Dockerfile .
 
     - name: Push Docker image to Container Registry
       run: docker push $BACKEND_IMAGE:latest
