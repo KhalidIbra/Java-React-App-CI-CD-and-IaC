@@ -57,7 +57,7 @@ jobs:
         terraform_version: 1.0.0
 
     - name: Terraform Plan for ${{ github.event.inputs.environment }} Environment
-      run: terraform -chdir=terraform plan -var="environment=${{ github.event.inputs.environment }}"
+      run: terraform -chdir=IaC plan -var="environment=${{ github.event.inputs.environment }}"
 
   terraform-apply:
     runs-on: ubuntu-latest
@@ -76,7 +76,7 @@ jobs:
     - name: Terraform Apply for ${{ github.event.inputs.environment }} Environment
       env:
         GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS_FILE }}
-      run: terraform -chdir=terraform apply -auto-approve -var="environment=${{ github.event.inputs.environment }}"
+      run: terraform -chdir=IaC apply -auto-approve -var="environment=${{ github.event.inputs.environment }}"
 
   terraform-destroy:
     runs-on: ubuntu-latest
@@ -95,4 +95,4 @@ jobs:
     - name: Terraform Destroy for ${{ github.event.inputs.environment }} Environment
       env:
         GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS_FILE }}
-      run: terraform -chdir=terraform destroy -auto-approve -var="environment=${{ github.event.inputs.environment }}"
+      run: terraform -chdir=IaC destroy -auto-approve -var="environment=${{ github.event.inputs.environment }}"
