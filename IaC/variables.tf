@@ -4,8 +4,6 @@
      sensitive = true 
 }
 
-
-
 variable "GCP_PROJECT_ID" {
     type = string
     default = "my-new-project-441421"
