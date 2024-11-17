@@ -9,6 +9,12 @@ on:
     branches:
       - main
       - develop
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment (testing or production)'
+        required: true
+        default: 'testing'    
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
