@@ -14,7 +14,7 @@ on:
       
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  BACKEND_IMAGE: gcr.io/${{ secrets.GCP_PROJECT_ID }}/backend
+  BACKEND_IMAGE: gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-image-repo
 
 jobs:
   build:
@@ -33,8 +33,7 @@ jobs:
     - name: Print current directory
       run: pwd
 
-
-    - name: Set up JDK 
+    - name: Set up JDK
       uses: actions/setup-java@v2
       with:
         distribution: 'temurin'
@@ -43,7 +42,6 @@ jobs:
     - name: Build project with Maven
       run: mvn -B package --file backend/pom.xml
       
-
     - name: Set up GCloud CLI and authenticate to GCR
       uses: google-github-actions/auth@v2
       with:
@@ -53,10 +51,10 @@ jobs:
       run: gcloud auth configure-docker gcr.io
 
     - name: Build Docker image
-      run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-image-repo:latest -f backend/Dockerfile .
+      run: docker build -t ${{ env.BACKEND_IMAGE }}:latest -f backend/Dockerfile .
 
     - name: Push Docker image to Container Registry
-      run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-image-repo:latest
+      run: docker push ${{ env.BACKEND_IMAGE }}:latest
 
   deploy-to-testing:
     runs-on: ubuntu-latest
@@ -64,21 +62,20 @@ jobs:
     if: github.ref == 'refs/heads/develop'
 
     steps:
-    - name: Set up GCloud CLI and authenticate to GVR
+    - name: Set up GCloud CLI and authenticate
       uses: google-github-actions/auth@v2
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         credentials_json: ${{ secrets.GCP_CREDENTIALS_FILE }}
 
-    - name: Set up kubectl
+    - name: Deploy to Cloud Run (Testing)
       run: |
-        gcloud container clusters get-credentials my-cluster --zone us-central1-a --project ${{ secrets.GCP_PROJECT_ID }}
-
-    - name: Deploy backend to GKE for testing
-      run: |
-        kubectl create namespace testing || true
-        kubectl apply -f Backend/backend-deployment.yaml --namespace=testing
-        kubectl rollout status deployment/backend -n testing
+        gcloud run deploy backend-testing \
+          --image ${{ env.BACKEND_IMAGE }}:latest \
+          --platform managed \
+          --region us-central1 \
+          --allow-unauthenticated \
+          --project ${{ secrets.GCP_PROJECT_ID }}
 
   deploy-to-production:
     runs-on: ubuntu-latest
@@ -86,18 +83,17 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-    - name: Set up GCloud CLI and authenticate to GCR
+    - name: Set up GCloud CLI and authenticate
       uses: google-github-actions/auth@v2
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         credentials_json: ${{ secrets.GCP_CREDENTIALS_FILE }}
 
-    - name: Set up kubectl
+    - name: Deploy to Cloud Run (Production)
       run: |
-        gcloud container clusters get-credentials my-cluster --zone us-central1-a --project ${{ secrets.GCP_PROJECT_ID }}
-
-    - name: Deploy backend to GKE for prod
-      run: |
-        kubectl create namespace production || true
-        kubectl apply -f Backend/backend-deployment.yaml --namespace=production
-        kubectl rollout status deployment/backend -n production
+        gcloud run deploy backend-production \
+          --image ${{ env.BACKEND_IMAGE }}:latest \
+          --platform managed \
+          --region us-central1 \
+          --allow-unauthenticated \
+          --project ${{ secrets.GCP_PROJECT_ID }}
