@@ -10,10 +10,11 @@ variable "GCP_ZONE" {
     type = string
     default = "us-central1-a"
 }
-variable "CLUSTER_NAME"  { 
-    type = string
-    default = "my-gke-cluster" 
+variable "GCP_CREDENTIALS_FILE" {
+  description = "The path to the Google Cloud service account credentials file"
+  type        = string
 }
+
 variable "environment" {
   description = "The deployment environment (e.g., testing or production)"
   type        = string

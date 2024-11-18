@@ -19,7 +19,7 @@ on:
       
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  BACKEND_IMAGE: gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-image-repo
+  BACKEND_IMAGE: gcr.io/${{ secrets.GCP_PROJECT_ID }}/backend
 
 jobs:
   build:
@@ -61,44 +61,4 @@ jobs:
     - name: Push Docker image to Container Registry
       run: docker push ${{ env.BACKEND_IMAGE }}:latest
 
-  deploy-to-testing:
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/develop'
-
-    steps:
-    - name: Set up GCloud CLI and authenticate
-      uses: google-github-actions/auth@v2
-      with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
-        credentials_json: ${{ secrets.GCP_CREDENTIALS_FILE }}
-
-    - name: Deploy to Cloud Run (Testing)
-      run: |
-        gcloud run deploy backend-testing \
-          --image ${{ env.BACKEND_IMAGE }}:latest \
-          --platform managed \
-          --region us-central1 \
-          --allow-unauthenticated \
-          --project ${{ secrets.GCP_PROJECT_ID }}
-
-  deploy-to-production:
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-    - name: Set up GCloud CLI and authenticate
-      uses: google-github-actions/auth@v2
-      with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
-        credentials_json: ${{ secrets.GCP_CREDENTIALS_FILE }}
-
-    - name: Deploy to Cloud Run (Production)
-      run: |
-        gcloud run deploy backend-production \
-          --image ${{ env.BACKEND_IMAGE }}:latest \
-          --platform managed \
-          --region us-central1 \
-          --allow-unauthenticated \
-          --project ${{ secrets.GCP_PROJECT_ID }}
+  
